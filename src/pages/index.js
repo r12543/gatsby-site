@@ -1,12 +1,50 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import { graphql } from 'gatsby'
+import Layout from '../components/layout'
 
-const IndexPage = () => (
-  <div>
-    <h1>Hi people</h1>
-    <p>Welcome!!!</p>
-    <Link to="/page-2/">Go to page 2</Link>
-  </div>
-)
+const mediumCDNUrl = `https://cdn-images-1.medium.com/max/150/`
+
+const IndexPage = ({ data }) => {
+  const posts = data.allMediumPost.edges
+
+  return (
+    <Layout>
+      <main>
+        {posts.map(post => (
+          <article key={post.node.id}>
+            <h2>{post.node.title}</h2>
+            <h3>by {post.node.author.name}</h3>
+            <img
+              src={`${mediumCDNUrl}/${post.node.virtuals.previewImage.imageId}`}
+              alt={post.node.title}
+              width="150"
+            />
+          </article>
+        ))}
+      </main>
+    </Layout>
+  )
+}
 
 export default IndexPage
+
+export const pageQuery = graphql`
+  query MediumQuery {
+    allMediumPost(limit: 100, sort: { fields: [createdAt], order: DESC }) {
+      edges {
+        node {
+          id
+          title
+          author {
+            name
+          }
+          virtuals {
+            previewImage {
+              imageId
+            }
+          }
+        }
+      }
+    }
+  }
+`

@@ -1,6 +1,14 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Default Starter',
+    title: 'Technical Blog',
   },
-  plugins: ['gatsby-plugin-react-helmet'],
+  plugins: [
+    {
+      resolve: `gatsby-source-medium`,
+      options: {
+        username: `@rajatchaudhary`,
+        limit: 200,
+      },
+    },
+  ],
 }
